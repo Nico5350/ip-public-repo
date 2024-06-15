@@ -6,8 +6,7 @@ from django.conf import settings
 from layers.services import services_nasa_image_gallery
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .models import Favourite
-from layers.transport import getAllImages
+from layers.transport import transport
 
 # función que invoca al template del índice de la aplicación.
 def index_page(request):
@@ -15,18 +14,20 @@ def index_page(request):
 
 # auxiliar: retorna 2 listados -> uno de las imágenes de la API y otro de los favoritos del usuario.
 def getAllImagesAndFavouriteList(request):
-    images = getAllImages(input=request.GET.get('search_value'))  # Ajusta el parámetro según tu lógica
-    favourite_list = []                                            # Aquí deberías implementar la lógica para obtener los favoritos del usuario
+    images = services_nasa_image_gallery()  # Llamar a la función para obtener las imágenes de la API
+    search_value = request.GET.get('search_value')  # Obtener el parámetro de búsqueda del request
+    images = transport(input=search_value)  # Llamar a transport con el parámetro de búsqueda
+    favourite_list = []  # Aquí deberías implementar la lógica para obtener los favoritos del usuario
 
     return images, favourite_list
+
 
 # función principal de la galería.
 # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
 # (*) este último, solo si se desarrolló el opcional de favoritos; caso contrario, será un listado vacío [].
 def home(request):
-    images,favourite_list=getAllImagesAndFavouriteList()
-    
-    return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list} )
+    images, favourite_list = getAllImagesAndFavouriteList(request)
+    return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list})
 
 
 # función utilizada en el buscador.

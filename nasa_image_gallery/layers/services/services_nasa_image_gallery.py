@@ -6,14 +6,13 @@ from ..generic import mapper
 from django.contrib.auth import get_user
 
 def getAllImages(input=None):
-    # obtiene un listado de imágenes desde transport.py y lo guarda en un json_collection.
-    # ¡OJO! el parámetro 'input' indica si se debe buscar por un valor introducido en el buscador.
-    json_collection = []
+    json_collection = transport.get_images(input)
 
     images = []
-
-    # recorre el listado de objetos JSON, lo transforma en una NASACard y lo agrega en el listado de images. Ayuda: ver mapper.py.
-
+    
+    for json_obj in json_collection:
+        nasacard = mapper.json_to_nasacard(json_obj)
+        images.append(nasacard)
     return images
 
 
