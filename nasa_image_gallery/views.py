@@ -2,22 +2,30 @@
 # si se necesita algún dato (lista, valor, etc), esta capa SIEMPRE se comunica con services_nasa_image_gallery.py
 import requests
 from django.shortcuts import redirect, render
-from django.conf import settings 
-from layers.services import services_nasa_image_gallery
+from django.conf import settings
+from .layers.services import services_nasa_image_gallery
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from layers.transport import transport
+from .layers.transport import transport
 
 # función que invoca al template del índice de la aplicación.
+
+
 def index_page(request):
     return render(request, 'index.html')
 
 # auxiliar: retorna 2 listados -> uno de las imágenes de la API y otro de los favoritos del usuario.
+
+
 def getAllImagesAndFavouriteList(request):
-    images = services_nasa_image_gallery()  # Llamar a la función para obtener las imágenes de la API
-    search_value = request.GET.get('search_value')  # Obtener el parámetro de búsqueda del request
-    images = transport(input=search_value)  # Llamar a transport con el parámetro de búsqueda
-    favourite_list = []  # Aquí deberías implementar la lógica para obtener los favoritos del usuario
+    # Llamar a la función para obtener las imágenes de la API
+    images = services_nasa_image_gallery()
+    # Obtener el parámetro de búsqueda del request
+    search_value = request.GET.get('search_value')
+    # Llamar a transport con el parámetro de búsqueda
+    images = transport(input=search_value)
+    # Aquí deberías implementar la lógica para obtener los favoritos del usuario
+    favourite_list = []
 
     return images, favourite_list
 
