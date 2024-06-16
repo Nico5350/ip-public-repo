@@ -19,11 +19,11 @@ def index_page(request):
 
 def getAllImagesAndFavouriteList(request):
     # Llamar a la función para obtener las imágenes de la API
-    images = services_nasa_image_gallery()
+    images = services_nasa_image_gallery.getAllImages()
     # Obtener el parámetro de búsqueda del request
     search_value = request.GET.get('search_value')
     # Llamar a transport con el parámetro de búsqueda
-    images = transport(input=search_value)
+    # images = transport(input=search_value)
     # Aquí deberías implementar la lógica para obtener los favoritos del usuario
     favourite_list = []
 
